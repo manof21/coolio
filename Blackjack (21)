@@ -1,0 +1,495 @@
+Console.Title = "Blackjack";
+BlackJackMenu();
+static void BlackJackMenu()
+{
+    int beginningcardcount = 4;
+    int totalbet = 0;
+    int Coins = 2500;
+    Console.WriteLine("---Welcome to BLACKJACK---");
+    Console.WriteLine("You currently have " + Coins);
+    Console.WriteLine("Press any key to begin a game...");
+    Console.ReadKey();
+    Betting(Coins,totalbet,beginningcardcount);
+}
+
+static void Game(int totalbet,int beginningcardcount, int Coins)
+{
+    Console.WriteLine("GAME HAS BEGUN");
+    int dealershand = 0;
+    int playershand = 0;
+    int aceactive = 0;
+    int cardnumber = 0;
+    do
+    {
+        Random randomcard = new Random();
+        int[] numbs = new int[13];
+        cardnumber = randomcard.Next(1,13);
+        
+        if (beginningcardcount % 2 == 0)
+        {
+            // players hand
+            if (cardnumber == 13)
+            {
+                cardnumber = 11;
+                aceactive = 1;
+                Console.WriteLine("Card: Ace");
+            }
+            else if (cardnumber == 12)
+            {
+                cardnumber = 10;
+                Console.WriteLine("Card: King");
+            }
+            else if (cardnumber == 11)
+            {
+                cardnumber = 10;
+                Console.WriteLine("Card: Queen");
+            }
+            else if (cardnumber == 10)
+            {
+                cardnumber = 10;
+                Console.WriteLine("Card: Jack");
+            }
+            else
+            {
+                Console.WriteLine("Card: " + cardnumber);
+            }
+            beginningcardcount = beginningcardcount + 1;
+            playershand = playershand + cardnumber;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("You: " + playershand);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        else
+        {
+            // dealers hand
+            beginningcardcount = beginningcardcount + 1;
+            dealershand = dealershand + cardnumber;
+            if (beginningcardcount < 7)
+                {
+                if (cardnumber == 13)
+                {
+                    cardnumber = 11;
+                    Console.WriteLine("Card: Ace");
+                }
+                else if (cardnumber == 12)
+                {
+                    cardnumber = 10;
+                    Console.WriteLine("Card: King");
+                }
+                else if (cardnumber == 11)
+                {
+                    cardnumber = 10;
+                    Console.WriteLine("Card: Queen");
+                }
+                else if (cardnumber == 10)
+                {
+                    cardnumber = 10;
+                    Console.WriteLine("Card: Jack");
+                }
+                else
+                {
+                    Console.WriteLine("Card: " + cardnumber);
+                }
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("Dealer: " + dealershand);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        
+        }
+        Thread.Sleep(950);
+    } while (beginningcardcount != 8);
+    HitOrStand(cardnumber, playershand, dealershand,totalbet,Coins,beginningcardcount,aceactive);
+}
+
+static void HitOrStand(int cardnumber, int playershand, int dealershand, int totalbet, int Coins, int beginningcardcount, int aceactive)
+{
+    int title = 0;
+    Console.WriteLine("Type Hit to add another card onto your deck or Stand to allow the dealer to proceed.");
+    string input = Console.ReadLine();
+    if (input.ToLower() == "hit")
+    {
+        Console.WriteLine("You've chosen hit.");
+        Random randomcard = new Random();
+        
+        int[] numbs = new int[13];
+        cardnumber = randomcard.Next(1,13);
+        if (aceactive == 1)
+        {
+            playershand = playershand - 11;
+        }
+        if (cardnumber == 13)
+        {
+            aceactive = 1;
+            cardnumber = 11;
+            Console.WriteLine("Card: Ace");
+        }
+        else if (cardnumber == 12)
+        {
+           cardnumber = 10;
+            Console.WriteLine("Card: King");
+        }
+        else if (cardnumber == 11)
+        {
+            cardnumber = 10;
+            Console.WriteLine("Card: Queen");
+        }
+        else if (cardnumber == 10)
+        {
+            cardnumber = 10;
+            Console.WriteLine("Card: Jack");
+        }
+        else
+        {
+            Console.WriteLine("Card: " + cardnumber);
+        }
+        playershand = playershand + cardnumber;
+        if (playershand > 21) 
+            {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("You: Bust!");
+            Console.ForegroundColor = ConsoleColor.White;
+            do
+            {
+                Console.Title = ")= 90% OF GAMBLERS QUIT BEFORE THEY HIT IT BIG";
+                Thread.Sleep(700);
+                title = title + 1;
+                Console.Title = "Blackjack";
+                Thread.Sleep(700);
+            } while (title < 5);
+            totalbet = 0;
+            beginningcardcount = 4;
+            Betting(Coins, totalbet, beginningcardcount);
+        }
+        else
+        if (aceactive == 1) {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("You: " + (playershand - 11) + "-" + playershand);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        else
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("You: " + playershand);
+         Console.ForegroundColor = ConsoleColor.White;
+        HitOrStand(cardnumber,playershand,dealershand,totalbet,Coins,beginningcardcount,aceactive);
+    }
+    if (input.ToLower() == "stand")
+    {
+     Console.WriteLine("You've chosen stand.");
+        if (dealershand < 17)
+        {
+            do
+            {
+                Random randomcard = new Random();
+                int[] numbs = new int[13];
+                cardnumber = randomcard.Next(1, 13);
+                if (cardnumber == 13)
+                {
+                    cardnumber = 11;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Card: Ace");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else if (cardnumber == 12)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    cardnumber = 10;
+                    Console.WriteLine("Card: King");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else if (cardnumber == 11)
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    cardnumber = 10;
+                    Console.WriteLine("Card: Queen");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else if (cardnumber == 10)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    cardnumber = 10;
+                    Console.WriteLine("Card: Jack");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.WriteLine("Card: " + cardnumber);
+                }
+                dealershand = dealershand + cardnumber;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("You: " + playershand);
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("Dealer: " + dealershand);
+                Console.ForegroundColor = ConsoleColor.White;
+                Thread.Sleep(950);
+            } while (dealershand < 17);
+            Winner();
+        }
+        else
+        {
+            Winner();
+        }
+        void Winner()
+        { 
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("You: " + playershand);
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("Dealer: " + dealershand);
+        Console.ForegroundColor = ConsoleColor.White;
+            if (dealershand - playershand == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Tie! " + (totalbet + totalbet / 4) + " Earned!");
+                Coins = Coins + (totalbet / 4);
+                do
+                {
+                    Console.BackgroundColor = ConsoleColor.Magenta;
+                    Console.Title = "TIE";
+                    Thread.Sleep(700);
+                    title = title + 1;
+                    Console.Title = "Blackjack";
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Thread.Sleep(700);
+                } while (title < 5);
+                totalbet = 0;
+                beginningcardcount = 4;
+                Betting(Coins, totalbet, beginningcardcount);
+            }
+            else if (dealershand > playershand)
+            {
+                if (dealershand <= 21)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Dealer Wins");
+                    do
+                    {
+                        Console.Title = ")= 90% OF GAMBLERS QUIT BEFORE THEY HIT IT BIG";
+                        Thread.Sleep(700);
+                        title = title + 1;
+                        Console.Title = "Blackjack";
+                        Thread.Sleep(700);
+                    } while (title < 5);
+                    totalbet = 0;
+                    beginningcardcount = 4;
+                    Betting(Coins, totalbet, beginningcardcount);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Dealer went bust! You win!");
+                    Coins = Coins + (totalbet * 2);
+                    do
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.Title = "WINNER";
+                        Thread.Sleep(700);
+                        title = title + 1;
+                        Console.Title = "Blackjack";
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Thread.Sleep(700);
+                    } while (title < 5);
+                    totalbet = 0;
+                    beginningcardcount = 4;
+                    Betting(Coins, totalbet, beginningcardcount);
+                }
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("You win! " + (totalbet * 2) + " Earned!");
+                Coins = Coins + (totalbet * 2);
+                do
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.Title = "WINNER";
+                    Thread.Sleep(700);
+                    title = title + 1;
+                    Console.Title = "Blackjack";
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Thread.Sleep(700);
+                } while (title < 5);
+                totalbet = 0;
+                beginningcardcount = 4;
+                Betting(Coins, totalbet, beginningcardcount);
+            }
+            }
+       
+    }
+}
+
+static void Betting(int Coins, int totalbet,int beginningcardcount)
+{
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine("How many coins would you like to bet? (Over 50 = minimum");
+    Console.WriteLine("Type !25 to place a certain amount of 25 coins.");
+    Console.WriteLine("Type !50 to place a certain amount of 50 coins.");
+    Console.WriteLine("Type !75 to place a certain amount of 75 coins.");
+    Console.WriteLine("Type !150 to place a certain amount of 150 coins.");
+    Console.WriteLine("Type !200 to place a certain amount of 200 coins.");
+    Console.WriteLine("Type !600 to place a certain amount of 600 coins.");
+    Console.WriteLine("Type !1000 to place a certain amount of 1000 coins.");
+    Console.WriteLine("Type Max to go all in on a bet.");
+    Console.WriteLine("Current Bet: " + totalbet);
+    Console.WriteLine("You have " + Coins + " left.");
+    Console.WriteLine("Type Start in order to start a game with the dealer");
+    string amount = Console.ReadLine();
+    int overboardcheck = 0;
+    int bet = 0;
+    if (amount.Contains("!25"))
+    {
+        Console.WriteLine("How many 25 coins would you like to bet?");
+        bet = int.Parse(Console.ReadLine());
+        overboardcheck = (Coins - bet * 25);
+        if (overboardcheck >= 0)
+        {
+            Console.WriteLine(bet + " 25 coins placed into the bet!");
+            totalbet = totalbet + (bet * 25);
+            Coins = Coins - (bet * 25);
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+        else
+        {
+            Console.WriteLine("Insufficient Funds");
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+    }
+    else if (amount.Contains("!50"))
+    {
+        Console.WriteLine("How many 50 coins would you like to bet?");
+        bet = int.Parse(Console.ReadLine());
+        overboardcheck = (Coins - bet * 50);
+        if (overboardcheck >= 0)
+        {
+            Console.WriteLine(bet + " 50 coins placed into the bet!");
+            totalbet = totalbet + (bet * 50);
+            Coins = Coins - (bet * 50);
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+        else
+        {
+            Console.WriteLine("Insufficient Funds");
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+    }
+    else if (amount.Contains("!75"))
+    {
+        Console.WriteLine("How many 75 coins would you like to bet?");
+        bet = int.Parse(Console.ReadLine());
+        overboardcheck = (Coins - bet * 75);
+        if (overboardcheck >= 0)
+        {
+            Console.WriteLine(bet + " 75 coins placed into the bet!");
+            totalbet = totalbet + (bet * 75);
+            Coins = Coins - (bet * 75);
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+        else
+        {
+            Console.WriteLine("Insufficient Funds");
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+    }
+    else if (amount.Contains("!150"))
+    {
+        Console.WriteLine("How many 150 coins would you like to bet?");
+        bet = int.Parse(Console.ReadLine());
+        overboardcheck = (Coins - bet * 150);
+        if (overboardcheck >= 0)
+        {
+            Console.WriteLine(bet + " 150 coins placed into the bet!");
+            totalbet = totalbet + (bet * 150);
+            Coins = Coins - (bet * 150);
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+        else
+        {
+            Console.WriteLine("Insufficient Funds");
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+    }
+    else if (amount.Contains("!200"))
+    {
+        Console.WriteLine("How many 200 coins would you like to bet?");
+        bet = int.Parse(Console.ReadLine());
+        overboardcheck = (Coins - bet * 200);
+        if (overboardcheck >= 0)
+        {
+            Console.WriteLine(bet + " 200 coins placed into the bet!");
+            totalbet = totalbet + (bet * 200);
+            Coins = Coins - (bet * 200);
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+        else
+        {
+            Console.WriteLine("Insufficient Funds");
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+    }
+    else if (amount.Contains("!600"))
+    {
+        Console.WriteLine("How many 600 coins would you like to bet?");
+        bet = int.Parse(Console.ReadLine());
+        overboardcheck = (Coins - bet * 600);
+        if (overboardcheck >= 0)
+        {
+            Console.WriteLine(bet + " 600 coins placed into the bet!");
+            totalbet = totalbet + (bet * 600);
+            Coins = Coins - (bet * 600);
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+        else
+        {
+            Console.WriteLine("Insufficient Funds");
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+    }
+    else if (amount.Contains("!1000"))
+    {
+        Console.WriteLine("How many 1000 coins would you like to bet?");
+        bet = int.Parse(Console.ReadLine());
+        overboardcheck = (Coins - bet * 1000);
+        if (overboardcheck >= 0)
+        {
+            Console.WriteLine(bet + "1000 coins placed into the bet!");
+            totalbet = totalbet + (bet * 1000);
+            Coins = Coins - (bet * 1000);
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+        else
+        {
+            Console.WriteLine("Insufficient Funds");
+            Betting(Coins, totalbet,beginningcardcount);
+        }
+    }
+    else if (amount.ToLower() == "max")
+    {
+        bet = Coins;
+        {
+            Console.WriteLine(bet + " Placed into the bet!");
+            totalbet = totalbet + (bet);
+            Coins = Coins - (bet);
+            Betting(Coins, totalbet, beginningcardcount);
+        }
+       
+    }
+    if (amount.ToLower() == "start")
+        if (totalbet >= 50)
+    {
+        Game(totalbet,beginningcardcount,Coins);
+    }
+    else
+        {
+            Console.WriteLine("A higher bet is required.");
+            Betting(Coins, totalbet, beginningcardcount);
+        }
+
+
+}
+                            
+
+
+
+
+
+
+
+
